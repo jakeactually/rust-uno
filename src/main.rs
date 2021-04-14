@@ -34,7 +34,7 @@ async fn main() -> std::io::Result<()> {
             .route("/api/penalty/{room_id}", web::post().to(game::penalty))
             .route("/api/pass/{room_id}", web::post().to(game::pass))
     })
-    .bind(("127.0.0.1", 8080))? 
+    .bind(("0.0.0.0", 8080))? 
     .run()
     .await
 }
