@@ -1,8 +1,8 @@
-use crate::user::User;
-use serde::Serialize;
 use crate::card::{Card, CardColor, GameState};
+use crate::user::User;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
+use serde::Serialize;
 
 #[derive(Clone, Serialize, Debug)]
 pub struct Room {
@@ -15,7 +15,7 @@ pub struct Room {
     pub color: CardColor,
     pub state: Option<GameState>,
     pub chain_count: u8,
-    pub direction: bool
+    pub direction: bool,
 }
 
 impl Room {
@@ -30,7 +30,7 @@ impl Room {
             color: CardColor::Red,
             state: None,
             chain_count: 0,
-            direction: false
+            direction: false,
         }
     }
 
@@ -40,7 +40,10 @@ impl Room {
     }
 
     pub fn player(&mut self, player_id: u32) -> &mut User {
-        self.players.iter_mut().find(|player| player.id == player_id).unwrap()
+        self.players
+            .iter_mut()
+            .find(|player| player.id == player_id)
+            .unwrap()
     }
 
     pub fn update_player(&mut self) {
@@ -57,7 +60,7 @@ impl Room {
             let mut rng = thread_rng();
             self.deck.shuffle(&mut rng);
         }
-    
+
         let result = self.deck[0].clone();
         self.deck = self.deck[1..].to_vec();
         result
@@ -89,9 +92,9 @@ impl Room {
         } else {
             self.left();
         }
-    
+
         let player = &self.players[self.turn as usize];
-    
+
         if player.hand.len() == 0 {
             self.next();
         }
