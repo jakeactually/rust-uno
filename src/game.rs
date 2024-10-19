@@ -23,7 +23,13 @@ pub async fn play(
     let mut context = data.lock().unwrap();
     let all = context.cards.clone();
     let (room_id, player_id) = room_and_player(req, session);
-    let room = context.rooms.get_mut(&room_id).unwrap();
+    let maybe_room = context.rooms.get_mut(&room_id);
+
+    if maybe_room.is_none() {
+        return Err(actix_web::error::ErrorNotFound("Room does not exist"));
+    }
+    
+    let room = maybe_room.unwrap();
     let players_amount = room.players.len();
 
     if players_amount < 2 {
